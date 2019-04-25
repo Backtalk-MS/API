@@ -6,8 +6,12 @@ the results in JSON format.
 # Import libraries
 from textblob import TextBlob
 from flask import Flask, request, jsonify
+import os, helpers
+
 
 app = Flask(__name__)
+localPath = os.path.dirname(os.path.abspath(__file__))
+
 
 @app.route('/api',methods=['POST'])
 def predict():
