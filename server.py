@@ -4,32 +4,32 @@ the results in JSON format.
 '''
 
 # Import libraries
-from textblob import TextBlob
 from flask import Flask, request, jsonify
 import os, helpers
 
-
+# Instantiate Flask
 app = Flask(__name__)
+
 localPath = os.path.dirname(os.path.abspath(__file__))
 
 
+# Prediction Function as an endpoint
 @app.route('/api',methods=['POST'])
 def predict():
 
     # Get the data from the POST request.
     data = request.get_json(force=True)
 
-    # Get only the text data from the json (Currently the only thing being passed in for testing purposes)
     text = data['text']
+    category = data['category']
+    endpoint = data['endpoint']
+    #if category == review then get rating
 
-    # Perform sentiment analysis on the text input
-    analysis = TextBlob(text).sentiment
-
-    # Output only the sentiment, and not polarity or subjectivity
-    output = analysis[0]
-
+    # Output only the sentiment
+    sentiment = helpers.get_sentiment(text)
+    prediction = helpers.predictCategory(text)
     # Return output
-    return jsonify(output)
+    return jsonify(prediction)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
