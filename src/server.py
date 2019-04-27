@@ -27,9 +27,9 @@ def predict():
 
     # Output only the sentiment
     sentiment = helpers.get_sentiment(text)
-    prediction = helpers.predictCategory(text)
+    #prediction = helpers.predictCategory(text)
     # Return output
-    return jsonify(prediction)
+    return jsonify(sentiment)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
