@@ -9,13 +9,24 @@ from keras.layers import Activation, Dense, Dropout
 from keras.preprocessing.text import Tokenizer
 from sklearn.preprocessing import LabelBinarizer
 from textblob import TextBlob
+from pymongo import MongoClient
 
 """
 Helper functions to be used by server.py
 """
 
+# For testing purposes only
+def test_db_insert(data):
+    client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
+    db = client['backtalkdev']
+    coll = db['newCollection']
+    coll.insert_one(data)
+    return
+
+
 """Loads the locally saved ML model. To be used for classification of bugs"""
-def load_model_():
+def load_model_from_database(modelSource):
+    
     #model = load_model
     return
 
@@ -25,7 +36,7 @@ def load_model_():
 # predictions. helpers.py loads it every time a prediction is made,
 # and this is not very efficient
 """Returns prediction of bug classifier"""
-def predictCategory(text):
+def predictCategory(text, modelSource):
     model = load_model('trainedModel.h5')
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     with open('tokenizer.pickle', 'rb') as handle:

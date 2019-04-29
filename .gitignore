@@ -1,2 +1,5 @@
 #ignore my json example
 examplejson.txt
+
+#ignore mongo db testing
+mongotest.py

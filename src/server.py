@@ -5,7 +5,7 @@ the results in JSON format.
 
 # Import libraries
 from flask import Flask, request, jsonify
-import os, helpers
+import os, helpers, train
 
 # Instantiate Flask
 app = Flask(__name__)
@@ -27,16 +27,29 @@ def predict():
 
     # Output only the sentiment
     sentiment = helpers.get_sentiment(text)
-    #prediction = helpers.predictCategory(text)
+    prediction = helpers.predictCategory(text, "foo")
     # Return output
+
+    testDict = {"user": "Alex Man Testing shit again",
+    "message": "yooOOOOooOooO",
+    "more stuff": "even more stuff"}
+    #helpers.test_db_insert(testDict)
+
     return jsonify(sentiment)
 
 
 """Generic model trains on a new dataset. Model ID is stored in the Database
 This model can then be used for prediction purposes in the future""" 
-
+# Necessary Params:
+# Location of the generic model
+# Location of the dataset
+# Label, and category columns identified
+# - Output -
+# Trained model will then be sent to the database.
 @app.route('/train_generic', methods=['POST'])
 def train_generic():
+    data = request.get_json(force=True)
+
     #TODO: Request JSON containing all info such as link to Database that will contain the dataset
     # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
     return
@@ -45,7 +58,8 @@ def train_generic():
 """New model trains on a new dataset. Model ID is stored in the Database
 This model can then be used for prediction purposes in the future""" 
 @app.route('/train', methods=['POST'])
-def train():
+def train_new():
+    data = request.get_json(force=True)
     #TODO: Request JSON containing all info such as link to Database that will contain the dataset
     # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
     # Also, json input will contain the format of a model. (Look at keras function save_json() for examples on this format. 
