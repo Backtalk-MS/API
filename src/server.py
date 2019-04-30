@@ -56,6 +56,8 @@ def train_generic():
     training_labels = data['labels']
 
     trained_model = train.train_new_model(model)
+
+    train.save_model_to_db(trained_model)
     #TODO: Request JSON containing all info such as link to Database that will contain the dataset
     # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
     return

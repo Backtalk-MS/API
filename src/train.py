@@ -24,7 +24,14 @@ def train_generic(jsonModel):
 
 # Train a new model as described by the developer on a new dataset.
 def train_new_model(JSON_model):
-    trained_model = JSON_model
+    #Build model from JSON file
+    trained_model = model_from_json(JSON_model)
+
+    #Compile model
+    trained_model.compile(loss='categorical_crossentropy',optimizer='adam', metrics=['accuracy'])
+    
+    #model.fit(x_train, y_train, batch_size=batch_size, epochs=8, verbose=1, validation_data=(x_test, y_test))
+
     return trained_model
 
 

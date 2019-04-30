@@ -25,13 +25,16 @@ def test_db_insert(data):
 
 # Will only retreive the JSON architecture of the model
 # WILL NOT run model.compile to build the model
+""" Loads a JSON file containing the model architecture. This is then compiled, trained, and saved to database."""
 def retrieve_JSON_model(username, password, modelID):
     JSON_model = "null"
     return JSON_model
 
 
-"""Loads the locally saved ML model. To be used for classification of bugs"""
-def load_model_from_database(modelSource):
+
+
+""" Loads the serialized, trained model from the database. No training required """
+def load_model_from_database(username, password, modelID):
 
     #model = load_model
     return
