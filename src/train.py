@@ -23,6 +23,10 @@ def train_generic(jsonModel):
 # When training new model, modelID points to new model ID
 
 # Train a new model as described by the developer on a new dataset.
-def train_new():
+def train_new_model(JSON_model):
+    trained_model = JSON_model
+    return trained_model
 
+
+def save_model_to_db(trained_model):
     return

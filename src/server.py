@@ -50,6 +50,12 @@ This model can then be used for prediction purposes in the future"""
 def train_generic():
     data = request.get_json(force=True)
 
+    # Retrieves the model from the database
+    model = helpers.retrieve_JSON_model(data['modelSource']['username'], data['modelSource']['password'], data['modelSource']['modelID'])
+    categories_to_train_on = data['categories']
+    training_labels = data['labels']
+
+    trained_model = train.train_new_model(model)
     #TODO: Request JSON containing all info such as link to Database that will contain the dataset
     # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
     return

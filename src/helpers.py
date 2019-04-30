@@ -23,8 +23,11 @@ def test_db_insert(data):
     coll.insert_one(data)
     return
 
+# Will only retreive the JSON architecture of the model
+# WILL NOT run model.compile to build the model
 def retrieve_JSON_model(username, password, modelID):
-    return
+    JSON_model = "null"
+    return JSON_model
 
 
 """Loads the locally saved ML model. To be used for classification of bugs"""
