@@ -5,7 +5,7 @@ the results in JSON format.
 
 # Import libraries
 from flask import Flask, request, jsonify
-import os, helpers, train
+import os, train, helpers
 
 # Instantiate Flask
 app = Flask(__name__)
@@ -14,7 +14,7 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 
 
 # Prediction Function as an endpoint
-@app.route('/api',methods=['POST'])
+@app.route('/predict',methods=['POST'])
 def predict():
 
     # Get the data from the POST request.

@@ -13,10 +13,16 @@ from sklearn.preprocessing import LabelBinarizer
 # train.py
 # used for training machine learning models and uploading to database
 
-
-def train_generic():
+# Train the original generic model on a new dataset
+def train_generic(jsonModel):
 
     return
 
+# NOTE TO SELF:
+# Combine both functions into one. When training on original model, modelID points to original model
+# When training new model, modelID points to new model ID
+
+# Train a new model as described by the developer on a new dataset.
 def train_new():
+
     return
