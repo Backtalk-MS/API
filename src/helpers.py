@@ -14,7 +14,7 @@ from pymongo import MongoClient
 """
 Helper functions to be used by server.py
 """
-
+#TEST
 # For testing purposes only
 def test_db_insert(data):
     client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
@@ -56,7 +56,7 @@ def predictCategory(text, modelSource):
     matrixedInput = tokenizer.texts_to_matrix(text, mode='tfidf')    
 
     prediction = model.predict(numpy.array(matrixedInput))
-    print(prediction[0])
+    print(prediction[0:])
     return prediction
 
 

@@ -1,5 +1,5 @@
 import pandas as pd
-import nltk, re, string, numpy, pickle, os, sys
+import nltk, re, string, numpy, pickle, os, sys, gridfs, io
 from pathlib import Path
 from tensorflow.keras import models
 from keras.models import Sequential
@@ -8,6 +8,7 @@ from keras.models import model_from_json
 from keras.layers import Activation, Dense, Dropout
 from keras.preprocessing.text import Tokenizer
 from sklearn.preprocessing import LabelBinarizer
+from pymongo import MongoClient
 
 
 # train.py
@@ -22,6 +23,7 @@ def train_generic(jsonModel):
 # Combine both functions into one. When training on original model, modelID points to original model
 # When training new model, modelID points to new model ID
 
+#TEST
 # Train a new model as described by the developer on a new dataset.
 def train_new_model(JSON_model):
     #Build model from JSON file
@@ -35,5 +37,25 @@ def train_new_model(JSON_model):
     return trained_model
 
 
-def save_model_to_db(trained_model):
+#TEST
+# Currently just a test implementation to see if a model can be loaded into database
+def save_model_to_db():
+    client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
+    db = client['backtalkdev']
+    fs = gridfs.GridFS(db, collection='modelUploadTest')
+
+    f = io.FileIO('../model/trainedModel.h5', 'r')
+    fileId = fs.put(f)
+    f.close
+    print(fileId)
+
     return
+
+# TEST
+def load_model_from_db():
+
+    return
+
+
+save_model_to_db()
+exit()

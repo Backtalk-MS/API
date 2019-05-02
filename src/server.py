@@ -35,7 +35,7 @@ def predict():
     "more stuff": "even more stuff"}
     #helpers.test_db_insert(testDict)
 
-    return jsonify(sentiment)
+    return jsonify(prediction[0])
 
 
 """Generic model trains on a new dataset. Model ID is stored in the Database
