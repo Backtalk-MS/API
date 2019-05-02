@@ -28,7 +28,7 @@ class JSONEncoder(json.JSONEncoder):
 
 # Will only retreive the JSON architecture of the model
 # WILL NOT run model.compile to build the model
-""" Loads a JSON file containing the model architecture. This is then compiled, trained, and saved to database."""
+""" Loads a JSON file containing the model architecture. This can then be compiled, trained, and saved to database."""
 def retrieve_json_model(username, password, modelID):
     #newmodelID = "5cc76ae2e7179a596b183e02"
     client = MongoClient('mongodb://'+ username + ':' + password + '@ds038888.mlab.com:38888/backtalkdev')
@@ -46,10 +46,9 @@ def retrieve_json_model(username, password, modelID):
 
 
 
-
+# HDf5 files not working properly with GridFS.
 """ Loads the serialized, trained model from the database. No training required """
 def load_model_from_database(username, password, modelID):
-
     #model = load_model
     return
 
@@ -73,13 +72,6 @@ def predictCategory(text, modelSource):
     print(prediction[0:])
     return prediction
 
-
-#Not sure what I was planning to do with this function
-"""Takes in parameters of all attributtes that need to be returned.
-Constructs properly formatted json of these attributes. Returns said json.
-Might need to create a separate function for each individual JSON object"""
-def construct_json(text, category, rating, endpoint):
-    return
 
 
 """ Loads a dataset in JSON format from the specified database"""

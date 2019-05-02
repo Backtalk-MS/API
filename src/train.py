@@ -39,6 +39,9 @@ def train_new_model(JSON_model, dataset, content, label):
     vocab_size = 1000
     batch_size = 20
 
+    #should be :
+    #tokenizer = text.Tonekiner(num_words=vocab_size)
+    #where text = all the words in the text corpus
     tokenizer = Tokenizer(num_words=vocab_size)
 
     tokenizer.fit_on_texts(train_text)
@@ -102,32 +105,28 @@ def load_model_from_db():
     #newFile.read()
     return
     
+#TODO:
 """ Loads CSV dataset into Pandas DataFrame """
 def prepare_csv_data(data):
     #training_data = pd.read_csv()
     return data
 
 
-#save_model_to_db()
-#load_model_from_db()
 
-
+# Not used. Delete later
 def insertJsonDataset():
     client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
     db = client['backtalkdev']
     coll = db['jsonDatasets']
-
     with open('test1.json') as js:
-        #print(js)
         jsonfile = json.load(js)
-
     coll.insert_one(jsonfile)
 
     return
 
 
-dataset = helpers.load_JSON_dataset('backtalk', 'backtalk123', '5ccaa7cc82543b408f03faec')
-data = helpers.prepare_json_data(dataset, 'category', 'content', 'test1')
-json_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
-train_new_model(json_model, data, 'content', 'category')
+#dataset = helpers.load_JSON_dataset('backtalk', 'backtalk123', '5ccaa7cc82543b408f03faec')
+#data = helpers.prepare_json_data(dataset, 'category', 'content', 'test1')
+#json_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
+#train_new_model(json_model, data, 'content', 'category')
 exit()

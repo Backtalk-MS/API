@@ -40,18 +40,29 @@ def predict():
 
 
 
-
+#TODO: Trained model needs to be input into the database. Object ID of the model and tokenizer should be return
+# For our purposes, model can be saved locally, and name + file path of model and tokenizer is returned
 """New model trains on a new dataset. Model ID is stored in the Database
 This model can then be used for prediction purposes in the future""" 
 @app.route('/train', methods=['POST'])
 def train_new():
     data = request.get_json(force=True)
 
-    # Hard coded stubs. Actual parameters will be received from request
-    JSON_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
-    training_data = helpers.load_JSON_dataset('backtalk', 'backtalk123', '5cca6f6ffb6fc00ed59f48ec')
+#NOTE: Naming conventions might be different than what is being passed in,
+# Get that sorted to make sure they are consistent between Web App and Training Server
 
+    # Read all parameters from request
+    user = data['username']
+    password = data['password']
+    model_id = data['model_id']
+    dataset_id = data['dataset_id']
 
+    train_labels = data['train_labels']
+
+    JSON_model = helpers.retrieve_json_model(user, password, model_id)
+    training_data = helpers.load_JSON_dataset(user, password, dataset_id)
+    data = helpers.prepare_json_data(training_data, )
+    
     return
 
 
