@@ -38,6 +38,24 @@ def predict():
     return jsonify(prediction[0])
 
 
+
+
+
+"""New model trains on a new dataset. Model ID is stored in the Database
+This model can then be used for prediction purposes in the future""" 
+@app.route('/train', methods=['POST'])
+def train_new():
+    data = request.get_json(force=True)
+
+    # Hard coded stubs. Actual parameters will be received from request
+    JSON_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
+    training_data = helpers.load_JSON_dataset('backtalk', 'backtalk123', '5cca6f6ffb6fc00ed59f48ec')
+
+
+    return
+
+
+
 """Generic model trains on a new dataset. Model ID is stored in the Database
 This model can then be used for prediction purposes in the future""" 
 # Necessary Params:
@@ -51,7 +69,7 @@ def train_generic():
     data = request.get_json(force=True)
 
     # Retrieves the model from the database
-    model = helpers.retrieve_JSON_model(data['modelSource']['username'], data['modelSource']['password'], data['modelSource']['modelID'])
+    model = helpers.retrieve_json_model(data['modelSource']['username'], data['modelSource']['password'], data['modelSource']['modelID'])
     categories_to_train_on = data['categories']
     training_labels = data['labels']
 
@@ -60,19 +78,6 @@ def train_generic():
     train.save_model_to_db(trained_model)
     #TODO: Request JSON containing all info such as link to Database that will contain the dataset
     # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
-    return
-
-
-"""New model trains on a new dataset. Model ID is stored in the Database
-This model can then be used for prediction purposes in the future""" 
-@app.route('/train', methods=['POST'])
-def train_new():
-    data = request.get_json(force=True)
-    #TODO: Request JSON containing all info such as link to Database that will contain the dataset
-    # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
-    # Also, json input will contain the format of a model. (Look at keras function save_json() for examples on this format. 
-    # Keras can use this to construct a model from JSON rather than from code. Model.fit() function can then be run in order
-    # to train this model. The .h5 file model weights, and .JSON model structure are both saved to the DB after training.
     return
 
 if __name__ == '__main__':
