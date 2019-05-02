@@ -1,5 +1,5 @@
 import pandas as pd
-import nltk, re, string, numpy, pickle, os, sys
+import nltk, re, string, numpy, pickle, os, sys, json, pprint
 from pathlib import Path
 from tensorflow.keras import models
 from keras.models import Sequential
@@ -10,6 +10,8 @@ from keras.preprocessing.text import Tokenizer
 from sklearn.preprocessing import LabelBinarizer
 from textblob import TextBlob
 from pymongo import MongoClient
+from bson.objectid import ObjectId
+from bson.json_util import dumps
 
 """
 Helper functions to be used by server.py
@@ -26,9 +28,17 @@ def test_db_insert(data):
 # Will only retreive the JSON architecture of the model
 # WILL NOT run model.compile to build the model
 """ Loads a JSON file containing the model architecture. This is then compiled, trained, and saved to database."""
-def retrieve_JSON_model(username, password, modelID):
-    JSON_model = "null"
-    return JSON_model
+def retrieve_json_model(username, password, modelID):
+    newmodelID = "5cc76ae2e7179a596b183e02"
+    client = MongoClient('mongodb://'+ username + ':' + password + '@ds038888.mlab.com:38888/backtalkdev')
+    db = client['backtalkdev']
+    coll = db['jsonModels']
+
+    JSON_model = coll.find_one({'_id' : ObjectId(newmodelID)})
+    x = bson.json_util.dumps(JSON_model)
+    print(JSON_model)
+    #print(coll.find_one({'_id' : ObjectId(newmodelID)}))
+    return
 
 
 
@@ -73,3 +83,6 @@ def construct_json(text, category, rating, endpoint):
 def get_sentiment(text):
     analysis = TextBlob(text).sentiment
     return analysis[0]
+
+retrieve_json_model('backtalk', 'backtalk123', 'test')
+exit()
