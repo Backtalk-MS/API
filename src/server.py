@@ -25,12 +25,9 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 """# Prediction Function as an endpoint
 @app.route('/predict/something',methods=['POST'])
 def predict():
-
     data = request.get_json(force=True)
     text = data['text']
     model_id = data['modelID'] #If reading model from DB
-
-
     prediction = helpers.predictCategory(text, model_name)
     return jsonify(prediction[0])"""
 
