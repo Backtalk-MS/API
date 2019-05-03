@@ -70,10 +70,14 @@ def train_new():
     data = helpers.prepare_json_data(training_data, train_label, train_content, dataset_name)
     
     return
+
 # Upload dataset in JSON format
 @app.route('/upload', methods=['GET','POST'])
 def upload_file():
     if request.method == 'POST':
+        # Get Params
+        modelID = request.form['modelID']
+
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -94,6 +98,8 @@ def upload_file():
         json_model = helpers.load_local_json()
         train.train_new_model(json_model, training_data, 'content', 'category')
 
+
+
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -104,29 +110,6 @@ def upload_file():
     </form>
     '''
 
-"""Generic model trains on a new dataset. Model ID is stored in the Database
-This model can then be used for prediction purposes in the future""" 
-# Necessary Params:
-# Location of the generic model
-# Location of the dataset
-# Label, and category columns identified
-# - Output -
-# Trained model will then be sent to the database.
-@app.route('/train_generic', methods=['POST'])
-def train_generic():
-    data = request.get_json(force=True)
-
-    # Retrieves the model from the database
-    model = helpers.retrieve_json_model(data['modelSource']['username'], data['modelSource']['password'], data['modelSource']['modelID'])
-    categories_to_train_on = data['categories']
-    training_labels = data['labels']
-
-    trained_model = train.train_new_model(model)
-
-    train.save_model_to_db(trained_model)
-    #TODO: Request JSON containing all info such as link to Database that will contain the dataset
-    # Also, needs a "labels" and "categories" from the categories so model knows which items to train on
-    return
 
 
 def allowed_file(filename):
