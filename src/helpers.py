@@ -48,25 +48,19 @@ def load_local_json():
     return model
 
 """Returns prediction of bug classifier"""
-def predictCategory(text, model_name):
-    # path[] = ['model_path', 'pickle_path]
-    path = load_from_path(model_name)
-    
-    #pickle_path = load_from_path(model_name) # EX:pickle_path = '../model/tokenizer.pickle'
+def predictCategory(text, modelID):
 
-    model = load_model(path[0]) #ex: model_path = '../model/trainedModel.h5'
+
+    model = load_local_model(modelID)
+    tokenizer = load_local_tokenizer(modelID)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     
     # Opening tokenizer might not be necessary for accurate predictions
     # and may be the reason for poor predictions
     # Will sort this out later
-    with open(path[1], 'rb') as handle:
-        tokenizer = pickle.load(handle)
-    
     matrixedInput = tokenizer.texts_to_matrix(text, mode='tfidf')    
 
     prediction = model.predict(numpy.array(matrixedInput))
-    #print(prediction[0:])
     return prediction
 
 
@@ -120,3 +114,11 @@ def model_ready(modelID):
     coll.find_one_and_update({'_id': ObjectId(modelID)}, {'$set':{'ready': True}})
     return
 
+def load_local_tokenizer(modelID):
+    with open('../model/trained/'+ modelID + '.pickle', 'rb') as handle:
+        tokenizer = pickle.load(handle)
+    return tokenizer
+
+def load_local_model(modelID):
+    trained_model = load_model('../model/trained/' + modelID + '.h5')
+    return trained_model
