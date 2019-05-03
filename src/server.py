@@ -18,18 +18,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'my key'
 localPath = os.path.dirname(os.path.abspath(__file__))
 
-#TODO: On server startup, deserialize dictionary containing model names,
-# mapped to location of models on disk
 
 
-"""# Prediction Function as an endpoint
-@app.route('/predict/something',methods=['POST'])
-def predict():
-    data = request.get_json(force=True)
-    text = data['text']
-    model_id = data['modelID'] #If reading model from DB
-    prediction = helpers.predictCategory(text, model_name)
-    return jsonify(prediction[0])"""
 
 @app.route('/predict/category',methods=['POST'])
 def predict():
