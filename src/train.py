@@ -60,12 +60,35 @@ def train_new_model(JSON_model, dataset, content, label, modelID):
     compiled_model.fit(x_train, y_train, batch_size=batch_size, epochs=8, verbose=1, validation_data=(x_test, y_test))
     
     save_trained_model(compiled_model, tokenizer, modelID)
+    model_ready(modelID)
     return# compiled
 
 """ Saves a reference of a local model to model dictionary"""
 def save_trained_model(trained_model, tokenizer, modelID):
+    # Opens serialized model info
+    with open('../model/model_dict.pickle', 'rb') as handle:
+        model_dict = pickle.load(handle)
+    
+    model_path = '../model/trained/'
+
+    my_dic = {}
+    my_dic['tokenizer_path'] = model_path + modelID + '.pickle'
+    my_dic['model_path'] = model_path + modelID + '.h5'
+    model_dict[modelID] = my_dic
+
+    trained_model.save(model_dict[modelID]['model_path'])
+    
+    # Saves tokenizer
+    with open(model_dict[modelID]['tokenizer_path'], 'wb') as handle:
+        pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    # Saves serialized model info
+    with open('../model/model_dict.pickle', 'wb') as handle:
+        pickle.dump(model_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    return
+
+def model_ready(modelID):
+    return
 
     
-
-    return
 
