@@ -26,8 +26,6 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o) 
 
 
-# Will only retreive the JSON architecture of the model
-# WILL NOT run model.compile to build the model
 """ Loads a JSON file containing the model architecture. This can then be compiled, trained, and saved to database."""
 def retrieve_json_model(username, password, modelID):
     #newmodelID = "5cc76ae2e7179a596b183e02"
@@ -44,17 +42,11 @@ def retrieve_json_model(username, password, modelID):
     return JSON_model
 
 
-
 def load_local_json():
     with open('../model/json_model/generic_model.json') as json_file:
         model = json.load(json_file)
     return model
 
-
-# Possibly input this into server.py
-# Server.py will load model once at start and use it for all
-# predictions. helpers.py loads it every time a prediction is made,
-# and this is not very efficient
 """Returns prediction of bug classifier"""
 def predictCategory(text, model_name):
     # path[] = ['model_path', 'pickle_path]
@@ -76,7 +68,6 @@ def predictCategory(text, model_name):
     prediction = model.predict(numpy.array(matrixedInput))
     #print(prediction[0:])
     return prediction
-
 
 
 """ Loads a dataset in JSON format from the specified database"""
@@ -122,12 +113,10 @@ def load_from_path(model_name):
     model_path.append('pickle_path')
     return model_path
 
-
-
-
-
-#retrieve_json_model('backtalk', 'backtalk123', 'test')
-#dataset = load_JSON_dataset('backtalk', 'backtalk123', '5cca6f6ffb6fc00ed59f48ec')
-#data = prepare_json_data(dataset, 'category', 'content', 'test')
-#print(dataset)
+def model_ready(modelID):
+    client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
+    db = client['backtalkdev']
+    coll = db['models']
+    coll.find_one_and_update({'_id': ObjectId(modelID)}, {'$set':{'ready': True}})
+    return
 
