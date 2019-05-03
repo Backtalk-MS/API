@@ -27,7 +27,7 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 def predictSentiment():
     #Get data from the post
     data = request.form.to_dict()
-
+    
     if(data["type"] == "feedback" or data["type"] == "review"):
         print("Performing sentiment analysis...")
         proccessedList = "this doesn't exist right now"
