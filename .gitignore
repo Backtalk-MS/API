@@ -3,3 +3,5 @@ examplejson.txt
 
 #ignore mongo db testing
 mongotest.py
+
+*.pyc
