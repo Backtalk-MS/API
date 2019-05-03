@@ -5,9 +5,11 @@ the results in JSON format.
 
 # Import libraries
 from flask import Flask, request, jsonify, flash, redirect, url_for, json
-import os, train, helpers
+import os, train, helpers, keras
 import pandas as pd
 from werkzeug.utils import secure_filename
+from werkzeug.datastructures import ImmutableMultiDict
+from nltk.tokenize import sent_tokenize, word_tokenize 
 
 UPLOAD_FOLDER = '../uploads'
 ALLOWED_EXTENSIONS = set(['json'])
@@ -21,11 +23,30 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 #TODO: On server startup, deserialize dictionary containing model names,
 # mapped to location of models on disk
 
+@app.route("/predict/sentiment", methods=["POST"])
+def predictSentiment():
+    #Get data from the post
+    data = request.form.to_dict()
+
+    if(data["type"] == "feedback" or data["type"] == "review"):
+        print("Performing sentiment analysis...")
+        proccessedList = "this doesn't exist right now"
+        jdata = {"processedText": proccessedList, "keyphrase": "none, dumby", "sentiment": helpers.get_sentiment(data["rawText"])}
+    else:
+        #Category
+        print("Performing categorical analysis...")
+        pass
+    
+    
+    jdata2 = {"result": jdata}
+    return jsonify(jdata2)
+
 # Prediction Function as an endpoint
 @app.route('/predict',methods=['POST'])
 def predict():
 
     # Get the data from the POST request.
+    print(request.get_json)
     data = request.get_json(force=True)
 
     text = data['text']
