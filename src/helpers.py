@@ -39,7 +39,6 @@ def retrieve_json_model(username, password, modelID):
     JSON_model = coll.find_one({'_id' : ObjectId(modelID)})
     JSON_model = JSONEncoder().encode(JSON_model)
     JSON_model = json.loads(JSON_model)
-
     
     #print(JSON_model)
     return JSON_model
@@ -58,18 +57,25 @@ def load_model_from_database(username, password, modelID):
 # predictions. helpers.py loads it every time a prediction is made,
 # and this is not very efficient
 """Returns prediction of bug classifier"""
-def predictCategory(text, modelSource):
+def predictCategory(text, model_name):
+    # path[] = ['model_path', 'pickle_path]
+    path = load_from_path(model_name)
+    
+    #pickle_path = load_from_path(model_name) # EX:pickle_path = '../model/tokenizer.pickle'
 
-    # Currently loading model and tokenizer from local machine. Needs to load from mongoDB
-    model = load_model('../model/trainedModel.h5')
+    model = load_model(path[0]) #ex: model_path = '../model/trainedModel.h5'
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    with open('../model/tokenizer.pickle', 'rb') as handle:
+    
+    # Opening tokenizer might not be necessary for accurate predictions
+    # and may be the reason for poor predictions
+    # Will sort this out later
+    with open(path[1], 'rb') as handle:
         tokenizer = pickle.load(handle)
     
     matrixedInput = tokenizer.texts_to_matrix(text, mode='tfidf')    
 
     prediction = model.predict(numpy.array(matrixedInput))
-    print(prediction[0:])
+    #print(prediction[0:])
     return prediction
 
 
@@ -107,7 +113,15 @@ def get_sentiment(text):
     analysis = TextBlob(text).sentiment
     return analysis[0]
 
+""" Loads the path of the model based on model name. """
+def load_from_path(model_name):
+    #TODO: Retrieve the model path based on its name.
+    model_path = []
 
+    #Returns stubs for now.
+    model_path.append('model_path')
+    model_path.append('pickle_path')
+    return model_path
 
 
 

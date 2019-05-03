@@ -12,6 +12,8 @@ app = Flask(__name__)
 
 localPath = os.path.dirname(os.path.abspath(__file__))
 
+#TODO: On server startup, deserialize dictionary containing model names,
+# mapped to location of models on disk
 
 # Prediction Function as an endpoint
 @app.route('/predict',methods=['POST'])
@@ -23,17 +25,16 @@ def predict():
     text = data['text']
     category = data['category']
     endpoint = data['endpoint']
+    model_id = data['model_id'] #If reading model from DB
+    model_name = data['model_name'] # ex: thisModel.h5
+
     #if category == review then get rating
 
     # Output only the sentiment
     sentiment = helpers.get_sentiment(text)
-    prediction = helpers.predictCategory(text, "foo")
+    prediction = helpers.predictCategory(text, model_name)
     # Return output
 
-    testDict = {"user": "Alex Man Testing shit again",
-    "message": "yooOOOOooOooO",
-    "more stuff": "even more stuff"}
-    #helpers.test_db_insert(testDict)
 
     return jsonify(prediction[0])
 
@@ -57,11 +58,13 @@ def train_new():
     model_id = data['model_id']
     dataset_id = data['dataset_id']
 
-    train_labels = data['train_labels']
+    train_label = data['train_label']
+    train_content = data['train_content']
+    dataset_name = 'test1'
 
     JSON_model = helpers.retrieve_json_model(user, password, model_id)
     training_data = helpers.load_JSON_dataset(user, password, dataset_id)
-    data = helpers.prepare_json_data(training_data, )
+    data = helpers.prepare_json_data(training_data, train_label, train_content, dataset_name)
     
     return
 

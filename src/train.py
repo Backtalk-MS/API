@@ -14,28 +14,26 @@ from pymongo import MongoClient
 # train.py
 # used for training machine learning models and uploading to database
 
-# Train the original generic model on a new dataset
-def train_generic(jsonModel):
-
-    return
-
 # NOTE TO SELF:
 # Combine both functions into one. When training on original model, modelID points to original model
 # When training new model, modelID points to new model ID
 
 # Train a new model as described by the developer on a new dataset.
+"""Params: JSON_model architecture file, prepared dataset in a python dataframe.
+Content, and label. These should be equal to the names of the columns in the data frame.
+Content is the text, and label is the label associated with that text."""
 def train_new_model(JSON_model, dataset, content, label):
     #Build model from JSON file
 
-    train_size = int(len(data) * .8)
+    train_size = int(len(dataset) * .8)
 
     train_text = dataset[content][:train_size]
     train_tags = dataset[label][:train_size]
 
-    test_text = data[content][train_size:]
-    test_tags = data[label][train_size:]
+    test_text = dataset[content][train_size:]
+    test_tags = dataset[label][train_size:]
 
-    num_labels = len(set(data[label]))
+    num_labels = len(set(dataset[label]))
     vocab_size = 1000
     batch_size = 20
 
@@ -70,6 +68,10 @@ def train_new_model(JSON_model, dataset, content, label):
 
 #TEST
 # Currently just a test implementation to see if a model can be loaded into database
+# Params to add:
+# dbuser, dbpass, either model location or actual model,
+# Return ObjectID of model once inserted into DB
+#NOTE: Probably won't be part of demo so won't work on it for now
 def save_model_to_db():
     client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
     db = client['backtalkdev']
@@ -78,13 +80,6 @@ def save_model_to_db():
     trained_model = open('../model/trainedModel.h5', 'r')
 
     coll.insert_one(trained_model)
-    #fs = gridfs.GridFS(db, collection='modelUploadTest')
-
-    #f = open('../model/trainedModel.h5', 'r')
-    #f = io.FileIO('../model/trainedModel.h5', 'r')
-    #fileId = fs.put(f, filename='myModel')
-    #f.close
-    #print(fileId)
 
     return
 
@@ -97,23 +92,16 @@ def load_model_from_db():
     modelUploadTest = gridfs.GridFS(db, collection="modelUploadTest")
     file = modelUploadTest.find_one({"filename" : "myModel"})
     #print(file.read())
-
-    #with open("modelsavetest.h5")
-    #file.save("modelsavetest.h5")
-    #print(modelUploadTest.exists(filename="myModel"))
-    #newFile = modelUploadTest.get("5cca363bd98fa4da7f115a0d")
-    #newFile.read()
     return
     
-#TODO:
+#TODO: Won't be used for demo. Ignore for now
 """ Loads CSV dataset into Pandas DataFrame """
 def prepare_csv_data(data):
     #training_data = pd.read_csv()
     return data
 
 
-
-# Not used. Delete later
+# Used for testing database insertion. Delete later
 def insertJsonDataset():
     client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
     db = client['backtalkdev']
@@ -129,4 +117,5 @@ def insertJsonDataset():
 #data = helpers.prepare_json_data(dataset, 'category', 'content', 'test1')
 #json_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
 #train_new_model(json_model, data, 'content', 'category')
+
 exit()
