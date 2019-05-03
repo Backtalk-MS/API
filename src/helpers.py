@@ -45,11 +45,10 @@ def retrieve_json_model(username, password, modelID):
 
 
 
-# HDf5 files not working properly with GridFS.
-""" Loads the serialized, trained model from the database. No training required """
-def load_model_from_database(username, password, modelID):
-    #model = load_model
-    return
+def load_local_json():
+    with open('../model/json_model/generic_model.json') as json_file:
+        model = json.load(json_file)
+    return model
 
 
 # Possibly input this into server.py
@@ -94,12 +93,12 @@ def load_JSON_dataset(username, password, datasetID):
 
 
 """ Loads json dataset into Pandas DataFrame"""
-def prepare_json_data(data, train_label, train_content, dataset_name):
+def prepare_json_data(data, train_label, train_content):
     train_texts = []
     # Load json data into pandas DataFrame
     # Return DataFrame with data
     #json_file = json.load(data)
-    for p in data[dataset_name]:
+    for p in data:
         train_texts.append((p[train_content], p[train_label]))
 
     training_data = pd.DataFrame.from_records(train_texts, columns=[train_content, train_label])
@@ -122,6 +121,8 @@ def load_from_path(model_name):
     model_path.append('model_path')
     model_path.append('pickle_path')
     return model_path
+
+
 
 
 

@@ -4,12 +4,13 @@ the results in JSON format.
 '''
 
 # Import libraries
-from flask import Flask, request, jsonify, flash, redirect, url_for
+from flask import Flask, request, jsonify, flash, redirect, url_for, json
 import os, train, helpers
+import pandas as pd
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '../uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'json', 'pdf'])
+ALLOWED_EXTENSIONS = set(['json'])
 
 # Instantiate Flask
 app = Flask(__name__)
@@ -58,10 +59,7 @@ def train_new():
 # Get that sorted to make sure they are consistent between Web App and Training Server
 
     # Read all parameters from request
-    user = data['username']
-    password = data['password']
     model_id = data['model_id']
-    dataset_id = data['dataset_id']
 
     train_label = data['train_label']
     train_content = data['train_content']
@@ -72,7 +70,7 @@ def train_new():
     data = helpers.prepare_json_data(training_data, train_label, train_content, dataset_name)
     
     return
-
+# Upload dataset in JSON format
 @app.route('/upload', methods=['GET','POST'])
 def upload_file():
     if request.method == 'POST':
@@ -90,6 +88,12 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
+            with open('../uploads/' + filename) as json_file:
+                data = json.load(json_file)
+                training_data = helpers.prepare_json_data(data, 'category', 'content')
+        json_model = helpers.load_local_json()
+        train.train_new_model(json_model, training_data, 'content', 'category')
+
     return '''
     <!doctype html>
     <title>Upload new File</title>

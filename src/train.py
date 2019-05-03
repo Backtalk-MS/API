@@ -24,7 +24,6 @@ Content, and label. These should be equal to the names of the columns in the dat
 Content is the text, and label is the label associated with that text."""
 def train_new_model(JSON_model, dataset, content, label):
     #Build model from JSON file
-
     train_size = int(len(dataset) * .8)
 
     train_text = dataset[content][:train_size]
@@ -82,24 +81,6 @@ def save_model_to_db():
     coll.insert_one(trained_model)
 
     return
-
-# TEST
-def load_model_from_db():
-    client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
-    db = client['backtalkdev']
-    #fs = gridfs.GridFS(db, collection='modelUploadTest')
-
-    modelUploadTest = gridfs.GridFS(db, collection="modelUploadTest")
-    file = modelUploadTest.find_one({"filename" : "myModel"})
-    #print(file.read())
-    return
-    
-#TODO: Won't be used for demo. Ignore for now
-""" Loads CSV dataset into Pandas DataFrame """
-def prepare_csv_data(data):
-    #training_data = pd.read_csv()
-    return data
-
 
 # Used for testing database insertion. Delete later
 def insertJsonDataset():
