@@ -45,8 +45,7 @@ def predict():
 
     #THIS WILL GET CHANGED. 
     rando = random.randint(0,2)
-    labels = ['bug', 'feature', 'complaint', 'feedback'] 
-    # DUMMY PLACEHOLDER FOR NOW
+    labels = ['bug', 'feature', 'complaint', 'feedback']
     return jsonify(labels[rando])
 
 # Upload dataset in JSON format

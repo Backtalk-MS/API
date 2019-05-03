@@ -1,5 +1,6 @@
 import pandas as pd
 import nltk, re, string, numpy, pickle, os, sys, json, pprint
+import tensorflow as tf
 from pathlib import Path
 from tensorflow.keras import models  # pylint: disable=import-error
 from keras.models import Sequential
@@ -12,6 +13,7 @@ from textblob import TextBlob
 from pymongo import MongoClient
 from bson import ObjectId
 from bson.json_util import dumps
+
 
 """
 Helper functions to be used by server.py
@@ -50,7 +52,6 @@ def load_local_json():
 """Returns prediction of bug classifier"""
 def predictCategory(text, modelID):
 
-
     model = load_local_model(modelID)
     tokenizer = load_local_tokenizer(modelID)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -61,6 +62,7 @@ def predictCategory(text, modelID):
     matrixedInput = tokenizer.texts_to_matrix(text, mode='tfidf')    
 
     prediction = model.predict(numpy.array(matrixedInput))
+    del model
     return prediction
 
 
