@@ -5,7 +5,7 @@ the results in JSON format.
 
 # Import libraries
 from flask import Flask, request, jsonify, flash, redirect, url_for, json
-import os, train, helpers
+import os, train, helpers, random
 import pandas as pd
 from werkzeug.utils import secure_filename
 
@@ -21,28 +21,33 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 #TODO: On server startup, deserialize dictionary containing model names,
 # mapped to location of models on disk
 
-# Prediction Function as an endpoint
-@app.route('/predict',methods=['POST'])
+
+"""# Prediction Function as an endpoint
+@app.route('/predict/something',methods=['POST'])
 def predict():
 
-    # Get the data from the POST request.
     data = request.get_json(force=True)
-
     text = data['text']
-    category = data['category']
-    endpoint = data['endpoint']
-    model_id = data['model_id'] #If reading model from DB
-    model_name = data['model_name'] # ex: thisModel.h5
+    model_id = data['modelID'] #If reading model from DB
 
-    #if category == review then get rating
 
-    # Output only the sentiment
-    sentiment = helpers.get_sentiment(text)
     prediction = helpers.predictCategory(text, model_name)
-    # Return output
+    return jsonify(prediction[0])"""
 
-    return jsonify(prediction[0])
+@app.route('/predict/category',methods=['POST'])
+def predict():
 
+    text = request.form['text']
+    modelID = request.form['modelID'] #If reading model from DB
+
+
+    prediction = helpers.predictCategory(text, modelID)
+
+    #THIS WILL GET CHANGED. 
+    rando = random.randint(0,2)
+    labels = ['bug', 'feature', 'complaint', 'feedback'] 
+    # DUMMY PLACEHOLDER FOR NOW
+    return jsonify(labels[rando])
 
 # Upload dataset in JSON format
 @app.route('/train', methods=['GET','POST'])
