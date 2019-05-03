@@ -22,7 +22,7 @@ from pymongo import MongoClient
 """Params: JSON_model architecture file, prepared dataset in a python dataframe.
 Content, and label. These should be equal to the names of the columns in the data frame.
 Content is the text, and label is the label associated with that text."""
-def train_new_model(JSON_model, dataset, content, label):
+def train_new_model(JSON_model, dataset, content, label, modelID):
     #Build model from JSON file
     train_size = int(len(dataset) * .8)
 
@@ -58,45 +58,14 @@ def train_new_model(JSON_model, dataset, content, label):
     compiled_model.compile(loss='categorical_crossentropy',optimizer='adam', metrics=['accuracy'])
     
     compiled_model.fit(x_train, y_train, batch_size=batch_size, epochs=8, verbose=1, validation_data=(x_test, y_test))
-    #score = myModel.evaluate(x_test, y_test, batch_size=batch_size, verbose=1)
-
-    #print('Test Accuracy: ', score[1])
-    #print("Score: ", score)
+    
+    save_trained_model(compiled_model, tokenizer, modelID)
     return# compiled
 
+""" Saves a reference of a local model to model dictionary"""
+def save_trained_model(trained_model, tokenizer, modelID):
 
-#TEST
-# Currently just a test implementation to see if a model can be loaded into database
-# Params to add:
-# dbuser, dbpass, either model location or actual model,
-# Return ObjectID of model once inserted into DB
-#NOTE: Probably won't be part of demo so won't work on it for now
-def save_model_to_db():
-    client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
-    db = client['backtalkdev']
-
-    coll = db["modelTest"]
-    trained_model = open('../model/trainedModel.h5', 'r')
-
-    coll.insert_one(trained_model)
+    
 
     return
 
-# Used for testing database insertion. Delete later
-def insertJsonDataset():
-    client = MongoClient('mongodb://backtalk:backtalk123@ds038888.mlab.com:38888/backtalkdev')
-    db = client['backtalkdev']
-    coll = db['jsonDatasets']
-    with open('test1.json') as js:
-        jsonfile = json.load(js)
-    coll.insert_one(jsonfile)
-
-    return
-
-
-#dataset = helpers.load_JSON_dataset('backtalk', 'backtalk123', '5ccaa7cc82543b408f03faec')
-#data = helpers.prepare_json_data(dataset, 'category', 'content', 'test1')
-#json_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
-#train_new_model(json_model, data, 'content', 'category')
-
-#exit()

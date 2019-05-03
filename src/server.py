@@ -41,73 +41,24 @@ def predict():
     prediction = helpers.predictCategory(text, model_name)
     # Return output
 
-
     return jsonify(prediction[0])
 
 
-
-
-#TODO: Trained model needs to be input into the database. Object ID of the model and tokenizer should be return
-# For our purposes, model can be saved locally, and name + file path of model and tokenizer is returned
-"""New model trains on a new dataset. Model ID is stored in the Database
-This model can then be used for prediction purposes in the future""" 
-@app.route('/train', methods=['POST'])
-def train_new():
-    data = request.get_json(force=True)
-
-#NOTE: Naming conventions might be different than what is being passed in,
-# Get that sorted to make sure they are consistent between Web App and Training Server
-
-    # Read all parameters from request
-    model_id = data['model_id']
-
-    train_label = data['train_label']
-    train_content = data['train_content']
-    dataset_name = 'test1'
-
-    JSON_model = helpers.retrieve_json_model(user, password, model_id)
-    training_data = helpers.load_JSON_dataset(user, password, dataset_id)
-    data = helpers.prepare_json_data(training_data, train_label, train_content, dataset_name)
-    
-    return
-
 # Upload dataset in JSON format
-@app.route('/upload', methods=['GET','POST'])
+@app.route('/train', methods=['GET','POST'])
 def upload_file():
-    if request.method == 'POST':
-        # Get Params
-        modelID = request.form['modelID']
 
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
-            with open('../uploads/' + filename) as json_file:
-                data = json.load(json_file)
-                training_data = helpers.prepare_json_data(data, 'category', 'content')
-        json_model = helpers.load_local_json()
-        train.train_new_model(json_model, training_data, 'content', 'category')
+    modelID = request.form['modelID']
 
+    myfile = request.files['file']
 
+    data = json.loads(myfile.read().decode('utf8'))
+    training_data = helpers.prepare_json_data(data, 'category', 'content')
+    json_model = helpers.load_local_json()
+    train.train_new_model(json_model, training_data, 'content', 'category', modelID)
 
     return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
+    Model Successfully Trained
     '''
 
 
@@ -118,3 +69,5 @@ def allowed_file(filename):
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
+
+    # once done training, turn model id ready to true
