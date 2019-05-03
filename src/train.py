@@ -1,7 +1,7 @@
 import pandas as pd
 import nltk, re, string, numpy, pickle, os, sys, gridfs, io, json, helpers
 from pathlib import Path
-from tensorflow.keras import models
+from tensorflow.keras import models  # pylint: disable=import-error
 from keras.models import Sequential
 from keras.models import load_model
 from keras.models import model_from_json
@@ -63,7 +63,7 @@ def train_new_model(JSON_model, dataset, content, label):
 
     #print('Test Accuracy: ', score[1])
     #print("Score: ", score)
-    return# trained_model
+    return# compiled
 
 
 #TEST
@@ -118,4 +118,4 @@ def insertJsonDataset():
 #json_model = helpers.retrieve_json_model('backtalk', 'backtalk123', '5cc76ae2e7179a596b183e02')
 #train_new_model(json_model, data, 'content', 'category')
 
-exit()
+#exit()

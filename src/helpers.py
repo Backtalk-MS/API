@@ -1,7 +1,7 @@
 import pandas as pd
 import nltk, re, string, numpy, pickle, os, sys, json, pprint
 from pathlib import Path
-from tensorflow.keras import models
+from tensorflow.keras import models  # pylint: disable=import-error
 from keras.models import Sequential
 from keras.models import load_model
 from keras.models import model_from_json
@@ -20,7 +20,7 @@ Helper functions to be used by server.py
 # Had to make a JSON encoder for ObjectID.
 # Have no idea why but it solved my problem?
 class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
+    def default(self, o):  # pylint: disable=method-hidden
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o) 

@@ -1,0 +1,7 @@
+JSON Object describing dataset
+
+Implement file uploading (link alex)
+
+Edit train route to accept file upload
+
+File mapping names of models to location in path
