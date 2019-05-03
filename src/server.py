@@ -19,6 +19,23 @@ app.secret_key = 'my key'
 localPath = os.path.dirname(os.path.abspath(__file__))
 
 
+@app.route("/predict/sentiment", methods=["POST"])
+def predictSentiment():
+    #Get data from the post
+    data = request.form.to_dict()
+    
+    if(data["type"] == "feedback" or data["type"] == "review"):
+        print("Performing sentiment analysis...")
+        proccessedList = "this doesn't exist right now"
+        jdata = {"processedText": proccessedList, "keyphrase": "none, dumby", "sentiment": helpers.get_sentiment(data["rawText"])}
+    else:
+        #Category
+        print("Performing categorical analysis...")
+        pass
+    
+    
+    jdata2 = {"result": jdata}
+    return jsonify(jdata2)
 
 
 @app.route('/predict/category',methods=['POST'])
